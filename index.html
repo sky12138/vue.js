@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>tab操作</title>
+		<link type="text/css" rel="stylesheet" href="bootstrap-3.3.0-dist/dist/css/bootstrap.min.css"/>
+	    <style>
+	    	#flx{
+	    		width: 100%;
+	    		height: 50px;
+	    		display: flex;
+	    	}
+	    	#flx input{
+	    		flex: 1;
+	    	}
+	    	.glyphicon-tree-deciduous{
+	    		color: green;
+	    	}
+	    </style>
+	</head>
+	<body>
+		<div class="page-header">
+		  <h1>
+		  	<span class="glyphicon glyphicon-tree-deciduous"></span>
+                              成绩录入系统
+            <small>Score entry system</small></h1>
+		</div>
+
+		<div id="flx">
+			<input type="text" class="form-control" placeholder="请输入编号" v-model="ID">
+			<input type="text" class="form-control" placeholder="请输入姓名" v-model="Name">
+			<input type="text" class="form-control" placeholder="请输入学号" v-model="XH">
+			<input type="text" class="form-control" placeholder="请输入成绩" v-model="CJ">
+			<button type="button" class="btn btn-primary" v-on:click="get()">提交</button>
+		</div>
+		<table class="table table-striped">
+			<tr>
+				<th>编号</th>
+				<th>姓名</th>
+				<th>学号</th>
+				<th>成绩</th>
+				<th>操作</th>
+			</tr>
+			<tr v-for="item in list" track-by="$index">
+				<td>{{item.id}}</td>
+				<td>{{item.name}}</td>
+				<td>{{item.xh}}</td>
+				<td>{{item.cj}}</td>
+				<td>
+					<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+					  	删除
+					</button>
+				</td>
+			</tr>
+        </table>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">提示！</h4>
+		      </div>
+		      <div class="modal-body">
+		         	是否确定删除该条数据?
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="remove()">确定</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+		<script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
+		<script type="text/javascript" src="bootstrap-3.3.0-dist/dist/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../js/vue.js"></script>
+		<script>
+			new Vue({
+				el:"body",
+				data:{
+					ID:"",
+					Name:"",
+					XH:"",
+					CJ:"",
+					list:[
+					  {id:"01",name:"张三丰",xh:10,cj:98}
+					]
+				},
+				methods:{
+					get:function(){
+						this.list.unshift({
+							id:this.ID,
+							name:this.Name,
+							xh:this.XH,
+							cj:this.CJ
+						});
+						//JSON.stringify 转换成json字符
+						localStorage.data = JSON.stringify(this.list)
+						this.ID='';
+						this.Name='';
+						this.XH='';
+						this.CJ='';
+					},
+					remove:function(index){
+						this.list.splice(index,1);
+						localStorage.data = JSON.stringify(this.list)
+					} 
+				},
+				//就是在vue页面初始化的时候会触发
+				created: function(){
+					if(localStorage.data){
+						this.list = JSON.parse(localStorage.data)
+					}
+					
+				}
+			})
+		</script>
+	</body>
+</html>
