@@ -48,7 +48,7 @@
 				<td>{{item.xh}}</td>
 				<td>{{item.cj}}</td>
 				<td>
-					<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+					<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" @click="getIdx($index)">
 					  	删除
 					</button>
 				</td>
@@ -74,13 +74,14 @@
 		  </div>
 		</div>
 		
-		<script type="text/javascript" src="../../js/jquery-3.1.0.min.js"></script>
+		<script type="text/javascript" src="../../../js/jquery-3.1.0.min.js"></script>
 		<script type="text/javascript" src="bootstrap-3.3.0-dist/dist/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="../js/vue.js"></script>
+		<script type="text/javascript" src="vue.js"></script>
 		<script>
 			new Vue({
 				el:"body",
 				data:{
+					Index:"",
 					ID:"",
 					Name:"",
 					XH:"",
@@ -104,8 +105,12 @@
 						this.XH='';
 						this.CJ='';
 					},
-					remove:function(index){
-						this.list.splice(index,1);
+					getIdx:function(index){
+						this.Index=index;
+						console.log(this.Index)
+					},
+					remove:function(){
+						this.list.splice(this.Index,1);
 						localStorage.data = JSON.stringify(this.list)
 					} 
 				},
